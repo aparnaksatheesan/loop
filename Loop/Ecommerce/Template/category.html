@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+    {{ category.description|truncatewords:200 }}
+  {% else %}
+    Aarushi Companies is a global ecommerce platform which offers high quality products at best price.
+  {% endif %}
+{% endblock %}
+
+
+{% block title %}
+  {% if category %}
+    {{ category.name }} - Aarushi Companies
+  {% else %}
+    All you want is available here
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class">
+                <div class="mx_auto">
+                <p><a href="{% url 'Dark:AllProdCat' %}">Our Product Collection</a></p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="mx_auto">
+        {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+    </div>
+<br>
+    <div>
+        <h1 class="my_title text-center">{{category.name}}</h1>
+        <p class="text-justify">{{category.description}}</p>
+    </div>
+        {% else %}
+    <div>
+         <img class="my_image my_image_padding" src="{% static 'image/banner.jpg' %}" alt="our product" width="100%;" height="400px;">
+    </div>
+<br>
+    <div>
+       <h1 class="text-center my_title">Our Product Collections</h1>
+        <p class="text-justify">All You Need is Available Here</p>
+    </div>
+            {% endif %}
+
+    <div class="container">
+        <div class="row mx_auto">
+            {% for product in products.object_list %}
+            <div class="my_bottom_margin  col-9 col-sm-12 col-md-4 col-lg-4">
+                <div class="card text-center" style="min-width:18rem;">
+                    <a href="{{product.get_url}}">
+                    <img class="card-img-top my-image" style="width:325px;height:325px;" src="{{product.image.url}}" alt="{{product.name}}">
+                    </a>
+                    <div class="card-body">
+                        <h4>{{product.name}}</h4>
+                        <p>{{product.price}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <br>
+
+    <div class="mx_auto">
+      {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <center>
+      <div class="text-center">
+      {% for pg in products.paginator.page_range %}
+        <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} Active {% endif %}">{{pg}}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+   </center>
+    </div>
+
+    <br>
+  </div>
+    </div>
+{% endblock %}
